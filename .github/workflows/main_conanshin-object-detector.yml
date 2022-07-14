@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'conanshin-object-detector'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_277898D4AF87418FB65D3AA86D5BD1B5 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_516CB71B8FFD4566AE3DD0CC620293C6 }}
