@@ -31,15 +31,15 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
         
-      - name: Zip all files for upload between jobs
-        run: zip --symlinks -r artifact.zip ./*
+#      - name: Zip all files for upload between jobs
+#        run: zip --symlinks -r artifact.zip ./*
       
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v2
         with:
           name: python-app
           path: |
-            artifact.zip
+            .
             !venv/
           retention-days: 1
 
@@ -55,6 +55,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: python-app
+          path: .
           
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
@@ -63,7 +64,7 @@ jobs:
           app-name: 'conanshin-object-detector'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_516CB71B8FFD4566AE3DD0CC620293C6 }}
-          package: artifact.zip
+#          package: artifact.zip
 
-      - name: Delete zip file
-        run: rm artifact.zip
+#      - name: Delete zip file
+#        run: rm artifact.zip
