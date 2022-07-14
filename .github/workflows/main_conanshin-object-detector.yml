@@ -35,7 +35,7 @@ jobs:
 #        run: zip --symlinks -r artifact.zip ./*
       
       - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: python-app
           path: |
@@ -52,10 +52,12 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: python-app
-          path: .
+          path: |
+            .
+            !venv/
           
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
