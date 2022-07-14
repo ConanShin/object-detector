@@ -55,7 +55,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: python-app
-          path: artifact.zip
           
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
@@ -64,6 +63,7 @@ jobs:
           app-name: 'conanshin-object-detector'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_516CB71B8FFD4566AE3DD0CC620293C6 }}
+          package: artifact.zip
 
       - name: Delete zip file
         run: rm artifact.zip
