@@ -39,6 +39,7 @@ jobs:
           path: |
             . 
             !venv/
+          retention-days: 1
 
   deploy:
     runs-on: ubuntu-latest
