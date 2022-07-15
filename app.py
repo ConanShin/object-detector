@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File
 from interface.image_url_interface import ImageUrlInterface
 from model import CarCounterModel
 
@@ -35,7 +35,7 @@ async def detect_from_image_link(request_body: ImageUrlInterface):
 
 
 @app.post("/file")
-async def detect_from_image_file(file: UploadFile = File()):
+async def detect_from_image_file(file: bytes = File()):
     loaded_image = await model.load_image_file(file)
     features = model.feature_extraction(loaded_image)
     probas, keep, bboxes = model.softmax(loaded_image, features)

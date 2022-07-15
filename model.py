@@ -20,8 +20,7 @@ class CarCounterModel:
 
     @staticmethod
     async def load_image_file(file: bytes):
-        request_object_content = await file.read()
-        image = Image.open(io.BytesIO(request_object_content))
+        image = Image.open(io.BytesIO(file))
         print('image size: ', image.size)
         return image
 
