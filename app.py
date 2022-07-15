@@ -6,6 +6,13 @@ app = FastAPI()
 model = CarCounterModel()
 
 
+@app.get("/")
+async def root():
+    return {
+        'status': 'ok'
+    }
+
+
 @app.get("/health")
 async def health_check():
     return {
