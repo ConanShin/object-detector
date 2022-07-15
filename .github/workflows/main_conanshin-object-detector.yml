@@ -4,41 +4,58 @@
 
 name: Build and deploy Python app to Azure Web App - conanshin-object-detector
 
+env:
+  AZURE_WEBAPP_NAME: conanshin-object-detector
+  PYTHON_VERSION: '3.7.13'
+
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Python version
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.7'
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Create and start virtual environment
         run: |
           python -m venv venv
           source venv/bin/activate
-      
+
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      - name: Set up dependency caching for faster installs
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install dependencies
-        run: pip install -r requirements.txt
-        
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-      
+        run: |
+          pip install -r requirements.txt
+
+#      - name: Zip all files for upload between jobs
+#        run: zip --symlinks -r artifact.zip ./* !venv/
+
       - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: python-app
           path: |
-            . 
+            .
             !venv/
+          retention-days: 1
 
   deploy:
     runs-on: ubuntu-latest
@@ -49,15 +66,18 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: python-app
           path: .
-          
+
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
+        uses: azure/webapps-deploy@0b651ed7546ecfc75024011f76944cb9b381ef1e
         with:
-          app-name: 'conanshin-object-detector'
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D0A08E1FD2764656ACEB4BA48113AD6A }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_516CB71B8FFD4566AE3DD0CC620293C6 }}
+
+#      - name: Delete zip file
+#        run: rm artifact.zip
