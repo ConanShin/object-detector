@@ -1,7 +1,6 @@
 from fastapi import FastAPI, File, UploadFile
 from interface.image_url_interface import ImageUrlInterface
 from model import CarCounterModel
-import uvicorn
 
 app = FastAPI()
 model = CarCounterModel()
@@ -38,6 +37,3 @@ async def detect_from_image_file(file: UploadFile = File()):
         'total object count': bboxes.shape[0],
         'car count': count
     }
-
-if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False)
