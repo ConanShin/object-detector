@@ -79,5 +79,6 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_516CB71B8FFD4566AE3DD0CC620293C6 }}
 
+
 #      - name: Delete zip file
 #        run: rm artifact.zip
