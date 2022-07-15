@@ -1,7 +1,7 @@
-import uvicorn
 from fastapi import FastAPI, File, UploadFile
 from interface.image_url_interface import ImageUrlInterface
 from model import CarCounterModel
+import uvicorn
 
 app = FastAPI()
 model = CarCounterModel()
